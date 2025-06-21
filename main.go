@@ -1,31 +1,31 @@
 package main
 
 import (
-	homepage "resources/api/homepage"
-
+	Homepage "GoogleCloudCostAnalysis/resources/api/homepage"
+	k8sclustergo "GoogleCloudCostAnalysis/resources/api/k8sCluster.go"
+	"GoogleCloudCostAnalysis/resources/api/login"
 	"fmt"
-	"log"
-	"os"
 
 	"github.com/gin-gonic/gin"
-	homepage "github.com/sagar0419/GoogleCloudCostAnalysis/resources/api/Homepage"
 )
 
 func main() {
 	fmt.Println("Getting Values")
 
-	// Getting values from OS ENV variables.
-	region := os.Getenv("GOOGLE_CLOUD_REGION")
-	projectID := os.Getenv("GOOGLE_CLOUD_PROJECT")
-
-	if region == "" || projectID == "" {
-		log.Fatal("Value of variable region or Project ID has not been passed")
-	}
-
-	// Setting up router
 	router := gin.Default()
+	login.Login()
+
 	// Trusted Proxy
 	router.SetTrustedProxies([]string{"127.0.0.1"})
 
-	router.Get("/", homepage.HomePage())
+	// Homepage
+	router.GET("/", Homepage.HomePage)
+	router.GET("/k8sclusters", k8sclustergo.ListCluster)
+	// router.GET("/login", login.Login)
+
+	// Server
+	err := router.Run(":3000")
+	if err != nil {
+		panic(err)
+	}
 }
