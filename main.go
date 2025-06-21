@@ -19,7 +19,7 @@ func main() {
 	router.SetTrustedProxies([]string{"127.0.0.1"})
 
 	// Homepage
-	router.GET("/", Homepage.HomePage)
+	router.GET("/", Homepage.FetchCost)
 	router.GET("/k8sclusters", k8sclustergo.ListCluster)
 	// router.GET("/login", login.Login)
 
